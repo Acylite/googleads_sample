@@ -1,4 +1,3 @@
-Google Ads Scripts
 This repository contains sample scripts for automating tasks in Google Ads using Python. It demonstrates the use of the Google Ads API to efficiently manage campaigns, analyze performance, and optimize ad spend.
 
 Features
