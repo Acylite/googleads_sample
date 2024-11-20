@@ -51,21 +51,20 @@ client_id = "INSERT_CUSTOMER_ID"
 Call the desired functions for data extraction:
 
 Fetch Campaign Data:
-
 ```python
 getCampaignMergeData(googleads_client, client_id)
-Fetch Keyword Summary:
 ```
 
+Fetch Keyword Summary:
 ```python
 getKeywordSummaryReport(googleads_client, client_id)
-Fetch Search Term Summary:
 ```
 
+Fetch Search Term Summary:
 ```python
 getSearchTermSummaryReport(googleads_client, client_id)
-Data will be loaded into BigQuery tables automatically.
 ```
+Data will be loaded into BigQuery tables automatically.
 
 ## Error Handling
 The script includes retry logic to handle API errors. Errors that persist after retries will be logged and can be reviewed for debugging.
