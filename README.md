@@ -1,75 +1,59 @@
-This repository contains sample scripts for automating tasks in Google Ads using Python. It demonstrates the use of the Google Ads API to efficiently manage campaigns, analyze performance, and optimize ad spend.
+Google Ads Campaign Data Processing
+This Python script integrates with the Google Ads API and BigQuery to extract, transform, and load (ETL) campaign data into BigQuery datasets for analysis. It processes various campaign reports, including keyword, search term, and conversion data.
 
 Features
-Campaign Management: Create, update, and pause campaigns programmatically.
-Ad Group Optimization: Adjust bids and targeting to improve performance.
-Performance Reporting: Fetch detailed metrics for campaigns, ad groups, and keywords.
-Custom Scripts: Examples tailored for specific automation needs.
-Prerequisites
-Before using the scripts, ensure you have the following:
-
-Google Ads API Access:
-A Google Ads account with API access enabled.
-A developer token from the Google Ads API Center.
-Python Environment:
-Python 3.7 or later installed.
-Required libraries (see the Installation section).
-OAuth2 Credentials:
-A google-ads.yaml configuration file with the required credentials.
-Installation
-Clone the Repository:
-
-
-git clone https://github.com/Acylite/googleads_sample.git
-cd googleads_sample
-Install Dependencies: Install the necessary Python libraries using pip:
-
-pip install -r requirements.txt
-Set Up Configuration: Create a google-ads.yaml file in the root directory with the following structure:
-
-developer_token: YOUR_DEVELOPER_TOKEN
-client_id: YOUR_CLIENT_ID
-client_secret: YOUR_CLIENT_SECRET
-refresh_token: YOUR_REFRESH_TOKEN
-Usage
-Run the Script: Execute the googleads_main.py script to perform actions:
-
-python googleads_main.py
-Customize Scripts: Modify the googleads_main.py file to include your own logic. Examples of use cases include:
-
-Filtering campaigns by name or status.
-Automating bid adjustments.
-Generating custom reports.
-Error Handling: Ensure proper handling of errors by customizing the provided error-handling code sections.
-
-File Structure
-googleads_sample/
-│
-├── googleads_main.py          # Main script for interacting with Google Ads API
-├── requirements.txt           # Dependencies for the project
-└── README.md                  # Documentation
-Example Code
-Here’s an example snippet to fetch all active campaigns:
-
-
-from google.ads.google_ads.client import GoogleAdsClient
-
-client = GoogleAdsClient.load_from_storage()
-service = client.get_service("GoogleAdsService")
-
-query = """
-    SELECT
-      campaign.id,
-      campaign.name
-    FROM
-      campaign
-    WHERE
-      campaign.status = 'ENABLED'
-"""
-
-response = service.search(customer_id="YOUR_CUSTOMER_ID", query=query)
-for row in response:
-    print(f"Campaign ID: {row.campaign.id}, Name: {row.campaign.name}")
-Resources
-Google Ads API Documentation
+Campaign Report Generation: Extracts campaign performance data for a specified date range.
+Keyword and Search Term Analysis: Collects keyword-level performance and conversion data.
+BigQuery Integration: Loads processed data into BigQuery datasets with support for dataset creation and schema adjustments.
+Error Handling and Retries: Implements retry mechanisms for Google Ads API requests to handle transient errors.
+Requirements
+Python 3.7+
 Google Ads Python Client Library
+Google Cloud Python SDK
+Required libraries: pandas, numpy, re, google-auth, google-cloud-bigquery
+Setup
+1. Install Dependencies
+Use pip to install the required Python libraries:
+
+pip install google-ads google-cloud-bigquery pandas numpy
+
+2. Configure Service Account Credentials
+Obtain a Google Ads API key and BigQuery service account key.
+Save the BigQuery service account key file as secrets_bq.json in the project directory.
+3. Configure Google Ads Client
+Create a google-ads.yaml configuration file in your project directory.
+Ensure the file contains credentials for accessing the Google Ads API.
+4. Set Up BigQuery Project
+Ensure the BigQuery project is configured in Google Cloud Console.
+Assign the appropriate service account roles for dataset and table access.
+Usage
+Extract and Load Campaign Data
+Import the script into your Python environment or run it directly.
+
+Initialize the Google Ads Client and specify the customer ID:
+
+from google.ads.googleads.client import GoogleAdsClient
+
+googleads_client = GoogleAdsClient.load_from_storage("google-ads.yaml")
+client_id = "INSERT_CUSTOMER_ID"
+Call the desired functions for data extraction:
+
+Fetch Campaign Data:
+
+
+getCampaignMergeData(googleads_client, client_id)
+
+Fetch Keyword Summary:
+getKeywordSummaryReport(googleads_client, client_id)
+
+Fetch Search Term Summary:
+getSearchTermSummaryReport(googleads_client, client_id)
+
+Data will be loaded into BigQuery tables automatically.
+
+Error Handling
+The script includes retry logic to handle API errors. Errors that persist after retries will be logged and can be reviewed for debugging.
+
+Customization
+Modify queries in the script to customize the data fetched.
+Update the destination fields for BigQuery tables to match your project structure.
